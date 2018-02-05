@@ -41,3 +41,6 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+e2e/app.e2e-spec.ts
+e2e/app.po.ts
+e2e/tsconfig.e2e.json
