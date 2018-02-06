@@ -1,4 +1,4 @@
-
+import { FeedSearchService } from './services/feed-search.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
@@ -12,6 +12,15 @@ import { SearchFeedComponent } from './components/search-feed/search-feed.compon
 
 import { FeedListContainerComponent } from './components/feed-list-container/feed-list-container.component';
 import { FeedItemComponent } from './components/feed-list-container/feed-item/feed-item.component';
+import { FormBuilderService } from './components/search-feed/service/form-builder.service';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { RouterModule, Routes } from '@angular/router';
+
+const routes: Routes = [
+  {
+    path: '', component: AppComponent
+  }
+];
 
 @NgModule({
   declarations: [
@@ -26,11 +35,17 @@ import { FeedItemComponent } from './components/feed-list-container/feed-item/fe
   ],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,
+    FormsModule,
     HttpClientModule,
     ActiveModule.forRoot(),
-    NavbarModule
+    NavbarModule,
+    RouterModule.forRoot(routes)
   ],
-  providers: [],
+  providers: [
+    FormBuilderService,
+    FeedSearchService
+  ],
   bootstrap: [AppComponent],
   entryComponents: []
 })
