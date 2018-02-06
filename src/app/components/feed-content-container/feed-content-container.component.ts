@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Feed } from './../../models/feed.model';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-feed-content-container',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FeedContentContainerComponent implements OnInit {
 
+  @Input() feedList: Map<any, Feed> = new Map();
+
   constructor() { }
 
   ngOnInit() {
-  }
+
+  };
 
 }

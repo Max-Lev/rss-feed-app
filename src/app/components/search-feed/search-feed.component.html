@@ -1,13 +1,13 @@
-<form [formGroup]="searchFeedForm" (ngSubmit)="searchSubmit()" novalidate class="col row">
+<form [formGroup]="searchFeedForm" (ngSubmit)="searchSubmit()" novalidate class="row">
 
-  <section class="col-md-10 col-sm-10">
+  <section class="col-md-11 col-sm-11">
     <div class="md-form mt-0 mb-0">
       <input formControlName="searchFeedName" type="text" autocomplete="off" id="feed-search" class="form-control m-0" mdbActive>
       <label for="feed-search">Feed Search</label>
     </div>
   </section>
 
-  <div class="text-center col-md-2 col-sm-2 p-0 mt-auto mb-auto">
+  <div class="text-center col-md-1 col-sm-1 p-0 mt-auto mb-auto">
     <button type="submit" class="fa fa-search border-0"></button>
   </div>
 

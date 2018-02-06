@@ -1,3 +1,4 @@
+import { DeepLinkingService } from './services/deep-linking.service';
 import { FeedSearchService } from './services/feed-search.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -44,7 +45,8 @@ const routes: Routes = [
   ],
   providers: [
     FormBuilderService,
-    FeedSearchService
+    FeedSearchService,
+    DeepLinkingService
   ],
   bootstrap: [AppComponent],
   entryComponents: []

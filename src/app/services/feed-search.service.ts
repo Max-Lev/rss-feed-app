@@ -3,41 +3,44 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import { Router } from '@angular/router';
+import { Observer } from 'rxjs/Observer';
 
 
 @Injectable()
 export class FeedSearchService {
 
   // tslint:disable-next-line:no-inferrable-types
-  feedParser: string = 'https://api.rss2json.com/v1/api.json?rss_url=';
+  feedParserURL: string = 'https://api.rss2json.com/v1/api.json?rss_url=';
+
+  searchDataResponse$: Subject<any> = new Subject();
 
   constructor(private httpClient: HttpClient, private router: Router) { };
 
-  search(feed: string): Observable<any> {
+  urlFormatter(feedpath: string): string {
+    return `${this.feedParserURL}${feedpath}`;
+  };
 
-    const response$: Subject<any> = new Subject();
+  setSearchParamsURL(feed: string) {
+    this.router.navigate(['.'], { queryParams: { feed: feed } });
+  };
+
+  searchFeed(feed: string): Observable<any> {
+
     const feedUrl: string = this.urlFormatter(feed);
+    this.httpClient.get(feedUrl).subscribe((response: any) => {
 
-    this.httpClient.get(feedUrl).subscribe((response) => {
-      console.log(response);
-      response$.next(response);
-      this.router.navigate(['.'], { queryParams: { feed: feed } });
-      console.log(window.history)
+      this.searchDataResponse$.next({ ...response });
+
+      this.setSearchParamsURL(feed);
       return response;
+
     }, (err) => { throw err; });
 
-    return response$;
+    return this.searchDataResponse$;
   };
 
-  urlFormatter(feedpath: string): string {
-    return `${this.feedParser}${feedpath}`;
-  };
+
 
 };
 
 
-// const feedUrl: string = 'https://dog.ceo/api/breeds/list/all'
-    // console.log(feedUrl);
-    // const params = new HttpParams().append('firstName', 'John').append('lastName', 'Doe');
-    // const x = location.href + '?name=z`z`z';
-    // window.location.replace(x);

@@ -1,14 +1,20 @@
 <app-header></app-header>
 
-<section class="container-fluid">
+<section class="container-fluid border-primary border-right-0 border-left-0 
+border-top-0 border-bottom border">
   <section class="row">
 
-    <section class="col-5" style="border:1px solid;">
-      <app-side-bar class="col"></app-side-bar>
+    <section class="col-5 border-primary border-right border-left-0 
+    border-top-0 border-bottom-0 border">
+      <app-side-bar [feedList]="feedListMap" class="col"></app-side-bar>
     </section>
 
-    <section class="col-7" style="border:1px solid;">
-      <app-feed-content-container class="col"></app-feed-content-container>
+    <section class="col-7">
+      <app-feed-content-container [feedList]="feedListMap" class="col">
+        <section class="col" style="border:1px solid lime;">
+
+        </section>
+      </app-feed-content-container>
     </section>
 
   </section>

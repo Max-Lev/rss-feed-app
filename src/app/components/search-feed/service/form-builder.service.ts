@@ -10,7 +10,7 @@ export class FormBuilderService {
   searchFormBuilder(): FormGroup {
     const searchForm = this.formBuilder.group({
       searchFeedName: [
-        'http://www.feedforall.com/sample-feed.xml',
+        'http://www.feedforall.com/sample.xml',
         [
           Validators.required
         ]]
