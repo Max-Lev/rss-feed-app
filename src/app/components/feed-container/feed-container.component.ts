@@ -16,13 +16,12 @@ import { Subscription } from 'rxjs/Subscription';
 export class FeedContainerComponent implements OnInit, AfterViewInit, OnDestroy, AfterContentInit {
 
   subscription: Subscription;
-  feedList: Feed[] = [];
+  feedContentItemsList: Feed[] = [];
   feedListMap: Map<any, Feed> = new Map();
   feedListSet: Set<Feed> = new Set();
 
   constructor(private deepLinkingService: DeepLinkingService,
-    private ref: ChangeDetectorRef,
-    private feedSearchService: FeedSearchService) { }
+    private ref: ChangeDetectorRef, private feedSearchService: FeedSearchService) { }
 
   ngOnInit() {
     this.getCurrentParams();
@@ -39,18 +38,15 @@ export class FeedContainerComponent implements OnInit, AfterViewInit, OnDestroy,
 
   getCurrentParams() {
     const params = this.deepLinkingService.getUrlParams('feed');
-    const queryParams = this.deepLinkingService.getCurrentParams('feed');
-    console.log(queryParams);
   };
 
   getFeedData$() {
     this.subscription = this.feedSearchService.searchDataResponse$.subscribe((feedResponse) => {
-      const feedID = this.setID();
-      const feed = new Feed(feedID, feedResponse.feed, feedResponse.items);
-      this.feedListSet.add(feed);
 
-      this.feedListMap.set({ feedID: this.feedListMap.size + 1 }, feed);
-      this.feedList.push(feed);
+      const feed = this.setFeedModel(feedResponse);
+      this.feedListSet.add(feed);
+      this.feedListMap.set({ feedID: feed.feedID }, feed);
+      this.feedContentItemsList = [feedResponse['items']];
 
       this.ref.detectChanges();
       return feedResponse;
@@ -58,13 +54,9 @@ export class FeedContainerComponent implements OnInit, AfterViewInit, OnDestroy,
   };
 
   setFeedModel(feedResponse: Feed): Feed {
-    const feedID = this.setID();
+    const feedID = this.feedListMap.size + 1;
     const feed = new Feed(feedID, feedResponse['feed'], feedResponse['items']);
     return feed;
-  };
-
-  setID(): number {
-    return this.feedListMap.size + 1;
   };
 
 }

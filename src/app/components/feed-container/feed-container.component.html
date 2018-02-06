@@ -1,20 +1,18 @@
 <app-header></app-header>
 
-<section class="container-fluid border-primary border-right-0 border-left-0 
-border-top-0 border-bottom border">
+<section class="container-fluid border-primary border-right-0 border-left-0 border-top-0 border-bottom border">
   <section class="row">
 
-    <section class="col-5 border-primary border-right border-left-0 
-    border-top-0 border-bottom-0 border">
+    <section class="col-5 border-primary border-right border-left-0 border-top-0 border-bottom-0 border">
       <app-side-bar [feedList]="feedListMap" class="col"></app-side-bar>
     </section>
 
     <section class="col-7">
-      <app-feed-content-container [feedList]="feedListMap" class="col">
-        <section class="col" style="border:1px solid lime;">
-
-        </section>
-      </app-feed-content-container>
+      <!-- <ng-container *ngFor="let feed of feedList;let i = index;"> -->
+      <ng-container *ngFor="let feed of feedContentItemsList;let i = index;">
+        <app-feed-content-container [feedList]="feed" class="col">
+        </app-feed-content-container>
+      </ng-container>
     </section>
 
   </section>

@@ -16,6 +16,7 @@ import { FeedItemComponent } from './components/feed-list-container/feed-item/fe
 import { FormBuilderService } from './components/search-feed/service/form-builder.service';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
+import { ContentItemDirective } from './components/feed-content-container/content-item.directive';
 
 const routes: Routes = [
   {
@@ -32,7 +33,8 @@ const routes: Routes = [
     HeaderComponent,
     SearchFeedComponent,
     FeedItemComponent,
-    FeedListContainerComponent
+    FeedListContainerComponent,
+    ContentItemDirective
   ],
   imports: [
     BrowserModule,

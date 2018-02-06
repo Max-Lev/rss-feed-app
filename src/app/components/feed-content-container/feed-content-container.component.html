@@ -1,1 +1,42 @@
-<ng-content></ng-content>
+<ng-container *ngTemplateOutlet="defaultFeedContentViewTemplate; context: feedDataContext">
+</ng-container>
+
+<ng-template #defaultFeedContentViewTemplate let-defaultViewData="defaultViewData">
+  <!-- {{defaultViewData | json}} -->
+
+  <!-- <br> -->
+  <section class="col pb-1" *ngFor="let contentItem of defaultViewData">
+    <section class="list-group">
+      <section class="list-group-item">
+        <h6 class="text-truncate mb-0" [innerHtml]="contentItem.title"></h6>
+        <div [innerHtml]="contentItem.content"></div>
+      </section>
+    </section>
+  </section>
+
+</ng-template>
+
+
+
+
+<!-- 
+myContext = {
+  $implicit: 'World', localSk: 'Svet'
+}; -->
+<!-- <ng-container *ngTemplateOutlet="greet"></ng-container>
+<span style="border:1px solid; display:block;"></span>
+
+<ng-container *ngTemplateOutlet="eng; context: myContext"></ng-container>
+<hr>
+<ng-container *ngTemplateOutlet="svk; context: myContext"></ng-container>
+<hr> -->
+
+<!-- <ng-template #greet>
+  <span>Hello</span>
+</ng-template>
+<ng-template #eng let-name>
+  <span>Hello {{name}}!</span>
+</ng-template>
+<ng-template #svk let-person="localSk">
+  <span>Ahoj {{person}}!</span>
+</ng-template> -->
