@@ -10,6 +10,9 @@ export class FormBuilderService {
   searchFormBuilder(): FormGroup {
     const searchForm = this.formBuilder.group({
       searchFeedName: [
+        // '',
+        // 'http://www.feedforall.com/sample-feed.xml',
+        // 'https://api.rss2json.com/v1/api.json?rss_url=http://www.feedforall.com/sample.xml',
         'http://www.feedforall.com/sample.xml',
         [
           Validators.required

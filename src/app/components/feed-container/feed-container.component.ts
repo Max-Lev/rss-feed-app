@@ -1,3 +1,5 @@
+import { IFeedItems } from './../../models/feed.model';
+import { SharedService } from './../../shared/shared.service';
 import { DeepLinkingService } from './../../services/deep-linking.service';
 import { Component, OnInit } from '@angular/core';
 import { AfterViewInit, OnDestroy, AfterContentInit } from '@angular/core/src/metadata/lifecycle_hooks';
@@ -21,6 +23,7 @@ export class FeedContainerComponent implements OnInit, AfterViewInit, OnDestroy,
   feedListSet: Set<Feed> = new Set();
 
   constructor(private deepLinkingService: DeepLinkingService,
+    private sharedService: SharedService,
     private ref: ChangeDetectorRef, private feedSearchService: FeedSearchService) { }
 
   ngOnInit() {
@@ -31,9 +34,10 @@ export class FeedContainerComponent implements OnInit, AfterViewInit, OnDestroy,
   };
 
   ngAfterViewInit(): void {
-
     this.getFeedData$();
+    this.getSelectedFeed$();
   };
+
   ngAfterContentInit(): void { };
 
   getCurrentParams() {
@@ -46,11 +50,23 @@ export class FeedContainerComponent implements OnInit, AfterViewInit, OnDestroy,
       const feed = this.setFeedModel(feedResponse);
       this.feedListSet.add(feed);
       this.feedListMap.set({ feedID: feed.feedID }, feed);
+      // this.feedListMap.set(`feedID:${feed.feedID}`, feed);
       this.feedContentItemsList = [feedResponse['items']];
-
+      console.log('feedListMap: ', this.feedListMap);
       this.ref.detectChanges();
       return feedResponse;
+
     });
+  };
+
+  getSelectedFeed$() {
+    this.subscription = this.sharedService.selectedItem$.subscribe((feed) => {
+      if (feed !== null) {
+        this.feedContentItemsList = [feed.items];
+      }
+      return feed;
+    });
+
   };
 
   setFeedModel(feedResponse: Feed): Feed {

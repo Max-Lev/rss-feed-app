@@ -4,7 +4,9 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import { Router } from '@angular/router';
 import { Observer } from 'rxjs/Observer';
-
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/throw';
 
 @Injectable()
 export class FeedSearchService {
@@ -16,26 +18,24 @@ export class FeedSearchService {
 
   constructor(private httpClient: HttpClient, private router: Router) { };
 
-  urlFormatter(feedpath: string): string {
-    return `${this.feedParserURL}${feedpath}`;
-  };
+  urlFormatter(feedpath: string): string { return `${this.feedParserURL}${feedpath}`; };
 
-  setSearchParamsURL(feed: string) {
-    this.router.navigate(['.'], { queryParams: { feed: feed } });
-  };
+  setSearchParamsURL(feed: string) { this.router.navigate(['.'], { queryParams: { feed: feed } }); };
 
   searchFeed(feed: string): Observable<any> {
 
     const feedUrl: string = this.urlFormatter(feed);
     this.httpClient.get(feedUrl).subscribe((response: any) => {
 
-      this.searchDataResponse$.next({ ...response });
-
-      this.setSearchParamsURL(feed);
+      if (response.status === 'ok') {
+        this.searchDataResponse$.next({ ...response });
+        this.setSearchParamsURL(feed);
+      } else {
+        console.log('error: ', response);
+        Observable.throw('err');
+      }
       return response;
-
-    }, (err) => { throw err; });
-
+    });
     return this.searchDataResponse$;
   };
 

@@ -17,23 +17,22 @@ export class FeedContentContainerComponent implements OnInit, OnChanges, AfterVi
 
   feedDataContext = { defaultViewData: [] };
 
-  constructor() {
-
-  };
+  constructor() { };
 
   ngOnInit() { };
 
   ngOnChanges(changes: SimpleChanges): void {
     this.renderContentTemplate();
-    console.log(this.feedList)
+    console.log('feedList: ', this.feedList)
   };
 
-  ngAfterViewInit(): void {
-
-  };
+  ngAfterViewInit(): void { };
 
   renderContentTemplate() {
     this.feedDataContext['defaultViewData'] = this.feedList;
   };
+
+
+
 
 }

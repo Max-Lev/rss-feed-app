@@ -8,7 +8,6 @@
     </section>
 
     <section class="col-7">
-      <!-- <ng-container *ngFor="let feed of feedList;let i = index;"> -->
       <ng-container *ngFor="let feed of feedContentItemsList;let i = index;">
         <app-feed-content-container [feedList]="feed" class="col">
         </app-feed-content-container>

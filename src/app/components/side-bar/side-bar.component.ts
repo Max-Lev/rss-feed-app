@@ -9,7 +9,6 @@ import { Component, OnInit, Input, SimpleChanges, ChangeDetectorRef } from '@ang
 })
 export class SideBarComponent implements OnInit, OnChanges {
 
-  // @Input() feedList: Array<Feed> = [];
   @Input() feedList: Map<any, Feed> = new Map();
 
   constructor(private ref: ChangeDetectorRef) { }

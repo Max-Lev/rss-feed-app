@@ -1,3 +1,4 @@
+import { SharedService } from './shared/shared.service';
 import { DeepLinkingService } from './services/deep-linking.service';
 import { FeedSearchService } from './services/feed-search.service';
 import { BrowserModule } from '@angular/platform-browser';
@@ -48,7 +49,8 @@ const routes: Routes = [
   providers: [
     FormBuilderService,
     FeedSearchService,
-    DeepLinkingService
+    DeepLinkingService,
+    SharedService
   ],
   bootstrap: [AppComponent],
   entryComponents: []
