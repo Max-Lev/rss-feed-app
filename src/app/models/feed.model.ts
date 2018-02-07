@@ -2,7 +2,7 @@ export interface IFeed {
     feedID: number;
     title: string;
     url: string;
-    items?: IFeedItems[];
+    items?: Array<IFeedItems>;
 };
 
 export interface IFeedItems {
@@ -15,11 +15,15 @@ export class Feed implements IFeed {
     feedID: number;
     title: string;
     url: string;
-    items?: IFeedItems[];
-    constructor(feedID: number, feed: IFeed, feedItems: IFeedItems[]) {
+    items?: Array<IFeedItems>;
+    isActive: boolean;
+    constructor(feedID: number, feed: IFeed, feedItems: IFeedItems[], isActive: boolean) {
         this.feedID = feedID;
         this.title = feed.title;
         this.url = feed.url;
         this.items = feedItems;
+        this.isActive = isActive;
     }
 };
+
+

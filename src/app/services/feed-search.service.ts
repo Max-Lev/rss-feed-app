@@ -22,14 +22,14 @@ export class FeedSearchService {
 
   setSearchParamsURL(feed: string) { this.router.navigate(['.'], { queryParams: { feed: feed } }); };
 
-  searchFeed(feed: string): Observable<any> {
+  searchFeed(feeduri: string): Observable<any> {
+    const feedAPIUrl: string = this.urlFormatter(feeduri);
 
-    const feedUrl: string = this.urlFormatter(feed);
-    this.httpClient.get(feedUrl).subscribe((response: any) => {
+    this.httpClient.get(feedAPIUrl).subscribe((response: any) => {
 
       if (response.status === 'ok') {
         this.searchDataResponse$.next({ ...response });
-        this.setSearchParamsURL(feed);
+        this.setSearchParamsURL(feeduri);
       } else {
         console.log('error: ', response);
         Observable.throw('err');

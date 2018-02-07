@@ -1,10 +1,9 @@
+
 <ng-container *ngTemplateOutlet="defaultFeedContentViewTemplate; context: feedDataContext">
 </ng-container>
 
 <ng-template #defaultFeedContentViewTemplate let-defaultViewData="defaultViewData">
-  <!-- {{defaultViewData | json}} -->
 
-  <!-- <br> -->
   <section class="col pb-1" *ngFor="let contentItem of defaultViewData">
     <section class="list-group">
       <section class="list-group-item">

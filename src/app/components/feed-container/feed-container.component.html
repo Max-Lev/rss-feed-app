@@ -8,8 +8,15 @@
     </section>
 
     <section class="col-7">
+
+      <ng-container>
+        <section class="col pt-3 pb-2">
+          <h4 class="text-center text-truncate">{{feedContentItemsUrlTitle}}</h4>
+        </section>
+      </ng-container>
+
       <ng-container *ngFor="let feed of feedContentItemsList;let i = index;">
-        <app-feed-content-container [feedList]="feed" class="col">
+        <app-feed-content-container [feedList]="feed">
         </app-feed-content-container>
       </ng-container>
     </section>
