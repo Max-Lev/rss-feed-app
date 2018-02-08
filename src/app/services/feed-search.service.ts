@@ -23,6 +23,7 @@ export class FeedSearchService {
   setSearchParamsURL(feed: string) { this.router.navigate(['.'], { queryParams: { feed: feed } }); };
 
   searchFeed(feeduri: string): Observable<any> {
+    
     const feedAPIUrl: string = this.urlFormatter(feeduri);
 
     this.httpClient.get(feedAPIUrl).subscribe((response: any) => {

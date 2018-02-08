@@ -8,7 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NavbarModule, ActiveModule } from 'angular-bootstrap-md';
 import { FeedContainerComponent } from './components/feed-container/feed-container.component';
 import { SideBarComponent } from './components/side-bar/side-bar.component';
-import { FeedContentContainerComponent, ContentFilterPipe } from './components/feed-content-container/feed-content-container.component';
+import { FeedContentContainerComponent } from './components/feed-content-container/feed-content-container.component';
 import { HeaderComponent } from './components/header/header.component';
 import { SearchFeedComponent } from './components/search-feed/search-feed.component';
 
@@ -33,8 +33,7 @@ const routes: Routes = [
     HeaderComponent,
     SearchFeedComponent,
     ContentItemDirective,
-    ListLatestPipe,
-    ContentFilterPipe
+    ListLatestPipe
   ],
   imports: [
     BrowserModule,

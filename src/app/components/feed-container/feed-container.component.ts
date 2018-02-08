@@ -1,7 +1,7 @@
 import { IFeedItems } from './../../models/feed.model';
 import { SharedService } from './../../shared/shared.service';
 import { DeepLinkingService } from './../../services/deep-linking.service';
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AfterViewInit, OnDestroy, AfterContentInit } from '@angular/core/src/metadata/lifecycle_hooks';
 import { FeedSearchService } from '../../services/feed-search.service';
 import { Feed, IFeed } from '../../models/feed.model';
@@ -22,10 +22,8 @@ export class FeedContainerComponent implements OnInit, AfterViewInit, OnDestroy,
   feedContentItemsList: Array<Feed> = [];
   feedContentItemsUrlTitle: string;
   feedListMap: Map<any, Feed> = new Map();
-  feedListSet: Set<Feed> = new Set();
 
   constructor(private deepLinkingService: DeepLinkingService, private sharedService: SharedService,
-    private ngZone: NgZone,
     private ref: ChangeDetectorRef, private feedSearchService: FeedSearchService) { }
 
   ngOnInit() {
@@ -90,10 +88,21 @@ export class FeedContainerComponent implements OnInit, AfterViewInit, OnDestroy,
   };
 
   removeContent_View_Items(mode: IFeedMode) {
-    debugger;
-    this.feedContentItemsList;
     this.feedListMap.delete(`feedID:${mode.feed.feedID}`);
-    if (mode.feed.isActive || this.feedListMap.size === 0) {
+    this.setNextView(mode.feed.feedID, mode.feed.isActive);
+  };
+
+  setNextView(id: number, isActive: boolean) {
+    if (this.feedListMap.size > 0) {
+      const values = this.feedListMap.values();
+      const list = Array.from(values);
+      const listid = list.map(item => item.feedID);
+      const maxid = Math.max(...listid);
+      const activeview = list.find(item => item.feedID === maxid);
+      this.feedContentItemsList = [activeview];
+      this.setContentTitle(activeview);
+      this.ref.detectChanges();
+    } else {
       this.setContentTitle(null);
       this.feedContentItemsList = [];
       this.ref.detectChanges();

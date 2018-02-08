@@ -8,26 +8,12 @@ import { ViewChildren, PipeTransform } from '@angular/core';
 import { QueryList } from '@angular/core';
 import { ViewContainerRef } from '@angular/core';
 
-@Pipe({ name: 'contentFilter' })
-export class ContentFilterPipe implements PipeTransform {
-  transform(value: any, args?: any): any {
-
-    let list: Array<Feed> = [];
-    if (value !== undefined) {
-      list = Array.from(value);
-      debugger;
-      return list.reverse();
-    }
-    return list;
-  }
-};
-
 
 @Component({
   selector: 'app-feed-content-container',
   templateUrl: './feed-content-container.component.html',
   styleUrls: ['./feed-content-container.component.scss'],
-  providers: [ContentFilterPipe],
+  providers: [],
 })
 export class FeedContentContainerComponent implements OnInit, AfterViewInit, OnChanges {
 
