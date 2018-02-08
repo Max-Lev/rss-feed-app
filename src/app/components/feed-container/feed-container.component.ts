@@ -1,7 +1,7 @@
 import { IFeedItems } from './../../models/feed.model';
 import { SharedService } from './../../shared/shared.service';
 import { DeepLinkingService } from './../../services/deep-linking.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { AfterViewInit, OnDestroy, AfterContentInit } from '@angular/core/src/metadata/lifecycle_hooks';
 import { FeedSearchService } from '../../services/feed-search.service';
 import { Feed, IFeed } from '../../models/feed.model';
@@ -19,12 +19,13 @@ import { IFeedMode, SELECT } from '../../models/feed.status';
 export class FeedContainerComponent implements OnInit, AfterViewInit, OnDestroy, AfterContentInit {
 
   subscription: Subscription;
-  feedContentItemsList: Array<IFeedItems[]>;
+  feedContentItemsList: Array<Feed> = [];
   feedContentItemsUrlTitle: string;
   feedListMap: Map<any, Feed> = new Map();
   feedListSet: Set<Feed> = new Set();
 
   constructor(private deepLinkingService: DeepLinkingService, private sharedService: SharedService,
+    private ngZone: NgZone,
     private ref: ChangeDetectorRef, private feedSearchService: FeedSearchService) { }
 
   ngOnInit() {
@@ -49,16 +50,21 @@ export class FeedContainerComponent implements OnInit, AfterViewInit, OnDestroy,
     this.subscription = this.feedSearchService.searchDataResponse$.subscribe((feedResponse) => {
 
       const feed = this.setFeedModel(feedResponse);
-      this.setContentTitle(feed);
-      this.feedListSet.add(feed);
-      this.feedListMap.set(`feedID:${feed.feedID}`, feed);
-      this.feedContentItemsList = [feedResponse['items']];
+      this.setUI(feed)
       console.log('feedListMap: ', this.feedListMap);
-      this.ref.detectChanges();
       return feedResponse;
 
     });
   };
+
+  setUI(feed: Feed) {
+    this.setContentTitle(feed);
+    this.feedListMap.set(`feedID:${feed.feedID}`, feed);
+    // this.feedListSet.add(feed);
+    this.feedContentItemsList = [feed];
+    this.ref.detectChanges();
+  };
+
 
   feedStatusManager$() {
     this.subscription = this.sharedService.getFeedStatus$.subscribe((mode: IFeedMode) => {
@@ -66,7 +72,6 @@ export class FeedContainerComponent implements OnInit, AfterViewInit, OnDestroy,
         if (mode.mode === SELECT) {
           this.setContent_View_Items(mode)
         } else {
-          debugger;
           this.removeContent_View_Items(mode);
         }
       }
@@ -76,23 +81,22 @@ export class FeedContainerComponent implements OnInit, AfterViewInit, OnDestroy,
 
   setContentTitle(feed: Feed | null) {
     this.feedContentItemsUrlTitle = (feed !== null) ? feed.url : '';
-
     this.ref.detectChanges();
   };
 
   setContent_View_Items(mode: IFeedMode) {
-    this.feedContentItemsList = [mode.feed.items];
+    this.feedContentItemsList = [mode.feed];
     this.setContentTitle(mode.feed);
   };
 
   removeContent_View_Items(mode: IFeedMode) {
     debugger;
+    this.feedContentItemsList;
     this.feedListMap.delete(`feedID:${mode.feed.feedID}`);
     if (mode.feed.isActive || this.feedListMap.size === 0) {
       this.setContentTitle(null);
-
-      // this.feedContentItemsUrlTitle = '';
-      // this.feedContentItemsList = [];
+      this.feedContentItemsList = [];
+      this.ref.detectChanges();
     }
   };
 

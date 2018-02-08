@@ -3,23 +3,30 @@
 <section class="container-fluid border-primary border-right-0 border-left-0 border-top-0 border-bottom border">
   <section class="row">
 
+    <!-- SIDE BAR -->
+
     <section class="col-5 border-primary border-right border-left-0 border-top-0 border-bottom-0 border">
       <app-side-bar [feedList]="feedListMap" class="col"></app-side-bar>
     </section>
 
-    <section class="col-7">
+    <!-- SIDE BAR -->
 
+    <!-- CONTENT ITEMS -->
+
+    <section class="col-7">
       <ng-container>
         <section class="col pt-3 pb-2">
           <h4 class="text-center text-truncate">{{feedContentItemsUrlTitle}}</h4>
         </section>
       </ng-container>
 
-      <ng-container *ngFor="let feed of feedContentItemsList;let i = index;">
-        <app-feed-content-container [feedList]="feed">
+      <ng-container>
+        <app-feed-content-container [feedList]="feedContentItemsList">
         </app-feed-content-container>
       </ng-container>
     </section>
+
+    <!-- CONTENT ITEMS -->
 
   </section>
 </section>
