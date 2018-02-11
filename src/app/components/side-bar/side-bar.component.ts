@@ -18,8 +18,6 @@ export class SideBarComponent implements OnInit, AfterViewInit, AfterContentInit
 
   feed$$: Array<Feed> = [];
 
-  list$: Subject<any> = new Subject();
-
   subscription: Subscription;
 
   constructor(private ref: ChangeDetectorRef, private sharedService: SharedService) { };
@@ -32,24 +30,14 @@ export class SideBarComponent implements OnInit, AfterViewInit, AfterContentInit
 
   ngAfterContentInit(): void { };
 
-  ngAfterViewInit(): void {
-    this.feedListObserver$();
-  };
+  ngAfterViewInit(): void { };
 
   feedView_ListAgregator() {
     if (this.feedList.length !== 0) {
       this.feed$$.push(this.feedList[0]);
       this.setSelectedItemUI(this.feedList[0])(this.resetSelectedItems());
-      this.list$.next(this.feedList);
       this.ref.markForCheck();
     }
-  };
-
-  feedListObserver$() {
-    this.subscription = this.list$.subscribe((obs) => {
-      console.log('obs: ', obs);
-      return obs;
-    });
   };
 
   select(feed: Feed) {

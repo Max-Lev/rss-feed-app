@@ -20,25 +20,28 @@ export class FeedSearchService {
 
   urlFormatter(feedpath: string): string { return `${this.feedParserURL}${feedpath}`; };
 
-  set_urlQueryParams(feed: string) { this.router.navigate(['.'], { queryParams: { feed: feed } }); };
+  set_urlQueryParams(feedurl: string) { this.router.navigate(['.'], { queryParams: { feed: feedurl } }); };
 
   searchFeed(feeduri: string): Observable<any> {
-    const feedAPIUrl: string = this.urlFormatter(feeduri);
-    this.httpClient.get(feedAPIUrl).subscribe((response: any) => {
-      if (response.status === 'ok') {
-        this.searchDataResponse$.next({ ...response });
-        this.set_urlQueryParams(feeduri);
-      } else {
-        console.log('error: ', response);
-        Observable.throw('err');
-      }
-      return response;
-    });
-    return this.searchDataResponse$;
+    if (feeduri !== null) {
+      const feedAPIUrl: string = this.urlFormatter(feeduri);
+      this.httpClient.get(feedAPIUrl).subscribe((response: any) => {
+        if (response.status === 'ok') {
+          this.searchDataResponse$.next({ ...response });
+          this.set_urlQueryParams(feeduri);
+        } else {
+          console.log('error: ', response, feedAPIUrl);
+          Observable.throw('err');
+        }
+        return response;
+      });
+      return this.searchDataResponse$;
+    };
   };
-
-
-
 };
+
+
+
+
 
 

@@ -1,3 +1,4 @@
+
 import { SharedService } from './shared/shared.service';
 import { DeepLinkingService } from './services/deep-linking.service';
 import { FeedSearchService } from './services/feed-search.service';
@@ -14,9 +15,10 @@ import { SearchFeedComponent } from './components/search-feed/search-feed.compon
 
 import { FormBuilderService } from './components/search-feed/service/form-builder.service';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, DefaultUrlSerializer, UrlSerializer } from '@angular/router';
 import { ContentItemDirective } from './components/feed-content-container/content-item.directive';
 import { ListLatestPipe } from './components/side-bar/pipes/list-latest.pipe';
+import { CustomUrlSerializer } from './shared/url-serializer';
 
 const routes: Routes = [
   {
@@ -33,7 +35,8 @@ const routes: Routes = [
     HeaderComponent,
     SearchFeedComponent,
     ContentItemDirective,
-    ListLatestPipe
+    ListLatestPipe,
+
   ],
   imports: [
     BrowserModule,
@@ -48,7 +51,10 @@ const routes: Routes = [
     FormBuilderService,
     FeedSearchService,
     DeepLinkingService,
-    SharedService
+    SharedService,
+    {
+      provide: UrlSerializer, useClass: CustomUrlSerializer
+    }
   ],
   bootstrap: [AppComponent],
   entryComponents: []

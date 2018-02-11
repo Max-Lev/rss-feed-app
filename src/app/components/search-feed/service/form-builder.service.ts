@@ -11,9 +11,9 @@ export class FormBuilderService {
     const searchForm = this.formBuilder.group({
       searchFeedName: [
         '',
-        // 'http://www.feedforall.com/sample.xml',
         [
-          Validators.required
+          Validators.required,
+          Validators.pattern('^(http:\/\/www.|https:\/\/www.)[a-zA-Z]{0,}(.com\/)[a-zA-Z-]{0,}(.xml)')
         ]]
     });
     return searchForm;

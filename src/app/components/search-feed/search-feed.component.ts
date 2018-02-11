@@ -22,22 +22,6 @@ export class SearchFeedComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.searchSubmit();
-    setTimeout(() => {
-      this.searchFeedForm.controls.searchFeedName.setValue('http://www.feedforall.com/sample.xml');
-      this.searchSubmit();
-    }, 0);
-    setTimeout(() => {
-      this.searchFeedForm.controls.searchFeedName.setValue('http://www.feedforall.com/sample-feed.xml');
-      this.searchSubmit();
-    }, 500);
-    setTimeout(() => {
-      this.searchFeedForm.controls.searchFeedName.setValue('http://www.feedforall.com/blog-feed.xml');
-      this.searchSubmit();
-    }, 1000);
-    // setTimeout(() => {
-    //   this.searchFeedForm.controls.searchFeedName.setValue('http://www.rss-specifications.com/blog-feed.xml');
-    //   this.searchSubmit();
-    // }, 1100);
   };
 
   searchSubmit() {

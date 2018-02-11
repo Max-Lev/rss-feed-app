@@ -6,9 +6,22 @@
       <label for="feed-search">Feed Search</label>
     </div>
   </section>
-
   <div class="text-center col-md-1 col-sm-1 p-0 mt-auto mb-auto">
     <button type="submit" class="fa fa-search border-0"></button>
   </div>
+
+  <section class="col" id="errors-container">
+    <div class="md-form mt-0 mb-0 col-md-12 col-sm-12">
+      <p *ngIf="searchFeedForm.get('searchFeedName').touched && 
+      searchFeedForm.get('searchFeedName').errors" class="text-center mt-3">
+        <span *ngIf="searchFeedForm.get('searchFeedName').errors.pattern">
+          Please Check Feed Url Address
+        </span>
+        <span *ngIf="searchFeedForm.get('searchFeedName').errors.required">
+          <span>Feed Url Address is Required</span>
+        </span>
+      </p>
+    </div>
+  </section>
 
 </form>

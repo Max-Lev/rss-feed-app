@@ -17,16 +17,27 @@ export class SharedService {
 
   constructor(private activeRoute: ActivatedRoute, private router: Router,
     private deepLinkingService: DeepLinkingService, private feedSearchService: FeedSearchService) {
-
   };
 
   feedState$(mode: IFeedMode) {
     this.getFeedStatus$.next(mode);
   };
 
+  setAppStorage(feed: Feed) {
+    localStorage.setItem(`feedID:${feed.feedID}`, JSON.stringify(feed));
+  };
+  removeAppStorage(feed: Feed) {
+    localStorage.removeItem(`feedID:${feed.feedID}`);
+  };
 
-  setAppStorage() {
-
+  getStorageList(): Array<Feed> {
+    const keys = Object.keys(localStorage);
+    return keys.map((item, key) => {
+      if (item.match(`feedID:${key + 1}`)) {
+        const storageitem = localStorage.getItem(item);
+        return JSON.parse(storageitem);
+      }
+    });
   };
 
 

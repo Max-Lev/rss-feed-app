@@ -33,6 +33,7 @@ export class FeedContainerComponent implements OnInit, AfterViewInit, OnDestroy,
     private ref: ChangeDetectorRef, private feedSearchService: FeedSearchService) { }
 
   ngOnInit() {
+    this.getStorageItems();
     this.getCurrentParams();
   };
   ngOnDestroy(): void {
@@ -47,6 +48,15 @@ export class FeedContainerComponent implements OnInit, AfterViewInit, OnDestroy,
 
   ngAfterContentInit(): void { };
 
+  getStorageItems() {
+    this.sharedService.getStorageList().map(item => {
+      if (item !== undefined) {
+        this.setFeedData(item);
+        this.feedSearchService.set_urlQueryParams(item.url);
+      }
+    });
+  };
+
   historyNav$() {
     Observable.fromEvent(window, 'popstate').subscribe((state) => {
       setTimeout(() => {
@@ -54,7 +64,7 @@ export class FeedContainerComponent implements OnInit, AfterViewInit, OnDestroy,
         const list: Array<Feed> = Array.from(this.feedListMap.values());
         list.map(item => item.isActive = false);
         const feed: Feed = list.find(item => item.url === feedurl);
-        feed.isActive = true;
+        if (feed !== undefined) { feed.isActive = true; }
         this.feedContent_view = [feed];
         this.setContentTitle(feed);
         this.ref.detectChanges();
@@ -77,16 +87,18 @@ export class FeedContainerComponent implements OnInit, AfterViewInit, OnDestroy,
   response_uiContainer(feed: Feed) {
     const existing = Array.from(this.feedListMap.values());
     if (!existing.some(item => item.url === feed.url)) {
-      this.feedListMap.set(`feedID:${feed.feedID}`, feed);
-      this.sideBar_FeedList = [feed];
-      // !!! this.sideBar_FeedList.push(feed); !!!
-      // !!! this.sideBar_FeedList.push([feed]); !!!
-      this.feedContent_view = [feed];
-      this.setContentTitle(feed);
+      this.sharedService.setAppStorage(feed);
+      this.setFeedData(feed);
       this.ref.detectChanges();
     }
   };
 
+  setFeedData(feed: Feed) {
+    this.feedListMap.set(`feedID:${feed.feedID}`, feed);
+    this.sideBar_FeedList = [feed];
+    this.feedContent_view = [feed];
+    this.setContentTitle(feed);
+  };
 
   feedStatusManager$() {
     this.subscription = this.sharedService.getFeedStatus$.subscribe((mode: IFeedMode) => {
@@ -103,7 +115,8 @@ export class FeedContainerComponent implements OnInit, AfterViewInit, OnDestroy,
   };
 
   setContentTitle(feed: Feed | null) {
-    this.feedContentItemsUrlTitle = (feed !== null) ? feed.url : '';
+    // this.feedContentItemsUrlTitle = (feed !== null) ? feed.url : '';
+    this.feedContentItemsUrlTitle = (feed !== undefined) ? feed.url : '';
     this.ref.detectChanges();
   };
 
@@ -115,6 +128,7 @@ export class FeedContainerComponent implements OnInit, AfterViewInit, OnDestroy,
   remove_ActionStore(mode: IFeedMode) {
     this.feedListMap.delete(`feedID:${mode.feed.feedID}`);
     this.remove_ActionViewRenderer(mode.feed.feedID, false);
+    this.sharedService.removeAppStorage(mode.feed);
   };
 
   remove_ActionViewRenderer(id: number, isActive: boolean) {
