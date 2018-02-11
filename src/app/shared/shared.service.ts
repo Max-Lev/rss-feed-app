@@ -32,12 +32,12 @@ export class SharedService {
 
   getStorageList(): Array<Feed> {
     const keys = Object.keys(localStorage);
-    return keys.map((item, key) => {
-      if (item.match(`feedID:${key + 1}`)) {
-        const storageitem = localStorage.getItem(item);
-        return JSON.parse(storageitem);
-      }
+    const feedkeys = keys.filter(item => item.match('feedID:'))
+    const list = feedkeys.map(item => {
+      const storageitem = localStorage.getItem(item);
+      return JSON.parse(storageitem);
     });
+    return list.filter(item => item !== undefined);
   };
 
 

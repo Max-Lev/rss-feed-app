@@ -50,10 +50,8 @@ export class FeedContainerComponent implements OnInit, AfterViewInit, OnDestroy,
 
   getStorageItems() {
     this.sharedService.getStorageList().map(item => {
-      if (item !== undefined) {
-        this.setFeedData(item);
-        this.feedSearchService.set_urlQueryParams(item.url);
-      }
+      this.setFeedData(item);
+      this.feedSearchService.set_urlQueryParams(item.url);
     });
   };
 
@@ -61,13 +59,23 @@ export class FeedContainerComponent implements OnInit, AfterViewInit, OnDestroy,
     Observable.fromEvent(window, 'popstate').subscribe((state) => {
       setTimeout(() => {
         const feedurl = this.activeRoute.snapshot.queryParams['feed'];
-        const list: Array<Feed> = Array.from(this.feedListMap.values());
-        list.map(item => item.isActive = false);
-        const feed: Feed = list.find(item => item.url === feedurl);
-        if (feed !== undefined) { feed.isActive = true; }
-        this.feedContent_view = [feed];
-        this.setContentTitle(feed);
-        this.ref.detectChanges();
+        if (feedurl !== undefined) {
+          const list: Array<Feed> = Array.from(this.feedListMap.values());
+          console.log('inmemory-storage-list: ', list);
+          /*!!! PERSISTANT FEED DEEP-LINKING !!!*/
+          if (list.length === 0) {
+            console.log('get-api-feed');
+            this.feedSearchService.searchFeed(feedurl);
+            /*!!! PERSISTANT FEED DEEP-LINKING !!!*/
+          } else {
+            list.map(item => item.isActive = false);
+            const feed: Feed = list.find(item => item.url === feedurl);
+            if (feed !== undefined) { feed.isActive = true; }
+            this.feedContent_view = [feed];
+            this.setContentTitle(feed);
+            this.ref.detectChanges();
+          }
+        }
       }, 0);
     });
   };
@@ -115,8 +123,7 @@ export class FeedContainerComponent implements OnInit, AfterViewInit, OnDestroy,
   };
 
   setContentTitle(feed: Feed | null) {
-    // this.feedContentItemsUrlTitle = (feed !== null) ? feed.url : '';
-    this.feedContentItemsUrlTitle = (feed !== undefined) ? feed.url : '';
+    this.feedContentItemsUrlTitle = (feed !== null && feed !== undefined) ? this.feedContentItemsUrlTitle = feed.url : '';
     this.ref.detectChanges();
   };
 

@@ -23,6 +23,9 @@ import { CustomUrlSerializer } from './shared/url-serializer';
 const routes: Routes = [
   {
     path: '', component: AppComponent
+  },
+  {
+    path: '**', pathMatch: 'full', redirectTo: ''
   }
 ];
 
