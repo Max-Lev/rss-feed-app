@@ -12,22 +12,8 @@ export class DeepLinkingService {
   onloadUrlParams(searchParamName: string): string {
     const searchParams = new URLSearchParams(location.search.substring(1));
     const params = searchParams.get(searchParamName);
-    console.log(searchParamName, params);
-
-    // this.feedSearchService.searchFeed('http://www.feedforall.com/sample.xml');
-     this.feedSearchService.searchFeed(params);
-
+    this.feedSearchService.searchFeed(params);
     return params;
   };
-
-  // getActiveQueryParams$(searchParamName: string): string {
-  //   let activeparams;
-  //   this.activeRoute.queryParams.subscribe((params) => {
-  //     console.log('params$ ', params);
-  //     activeparams = params;
-  //     return params;
-  //   });
-  //   return activeparams;
-  // };
 
 }

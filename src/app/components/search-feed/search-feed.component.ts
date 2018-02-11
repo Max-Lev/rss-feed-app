@@ -18,12 +18,14 @@ export class SearchFeedComponent implements OnInit, AfterViewInit {
     this.searchFeedForm = this.formBuilderService.searchFormBuilder();
   };
 
-  ngOnInit() {
-
-  };
+  ngOnInit() { };
 
   ngAfterViewInit(): void {
     this.searchSubmit();
+    setTimeout(() => {
+      this.searchFeedForm.controls.searchFeedName.setValue('http://www.feedforall.com/sample.xml');
+      this.searchSubmit();
+    }, 0);
     setTimeout(() => {
       this.searchFeedForm.controls.searchFeedName.setValue('http://www.feedforall.com/sample-feed.xml');
       this.searchSubmit();
@@ -32,6 +34,10 @@ export class SearchFeedComponent implements OnInit, AfterViewInit {
       this.searchFeedForm.controls.searchFeedName.setValue('http://www.feedforall.com/blog-feed.xml');
       this.searchSubmit();
     }, 1000);
+    // setTimeout(() => {
+    //   this.searchFeedForm.controls.searchFeedName.setValue('http://www.rss-specifications.com/blog-feed.xml');
+    //   this.searchSubmit();
+    // }, 1100);
   };
 
   searchSubmit() {

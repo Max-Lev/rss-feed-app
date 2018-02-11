@@ -1,10 +1,15 @@
-
 <ng-container *ngTemplateOutlet="defaultFeedContentViewTemplate; context: feedDataContext">
 </ng-container>
 
 <ng-template #defaultFeedContentViewTemplate let-defaultViewData="defaultViewData">
 
   <section class="col pb-1" *ngFor="let contentItem of defaultViewData;let i = index;">
+
+    <div>
+      count: {{defaultViewData.length}}
+      <br> url:{{this.feedList[0].url}}
+    </div>
+
     <section class="list-group">
       <section class="list-group-item">
         <h6 class="text-truncate mb-0" [innerHtml]="contentItem.title"></h6>

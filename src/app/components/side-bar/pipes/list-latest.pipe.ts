@@ -2,7 +2,8 @@ import { Feed } from './../../../models/feed.model';
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'listLatest'
+  name: 'listLatest',
+  pure: false
 })
 export class ListLatestPipe implements PipeTransform {
 
@@ -14,6 +15,6 @@ export class ListLatestPipe implements PipeTransform {
       return list.reverse();
     }
     return list;
-  }
+  };
 
 }

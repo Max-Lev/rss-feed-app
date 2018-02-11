@@ -6,7 +6,7 @@
     <!-- SIDE BAR -->
 
     <section class="col-5 border-primary border-right border-left-0 border-top-0 border-bottom-0 border">
-      <app-side-bar [feedList]="feedListMap" class="col"></app-side-bar>
+      <app-side-bar [feedList]="sideBar_FeedList" class="col"></app-side-bar>
     </section>
 
     <!-- SIDE BAR -->
@@ -21,7 +21,7 @@
       </ng-container>
 
       <ng-container>
-        <app-feed-content-container [feedList]="feedContentItemsList">
+        <app-feed-content-container [feedList]="feedContent_view">
         </app-feed-content-container>
       </ng-container>
     </section>

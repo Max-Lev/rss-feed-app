@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs/Observable';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { IFeedItems } from './../../models/feed.model';
 import { SharedService } from './../../shared/shared.service';
 import { DeepLinkingService } from './../../services/deep-linking.service';
@@ -8,6 +10,8 @@ import { Feed, IFeed } from '../../models/feed.model';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/observable/from';
+import 'rxjs/add/observable/fromEvent';
 import { IFeedMode, SELECT } from '../../models/feed.status';
 
 @Component({
@@ -19,11 +23,13 @@ import { IFeedMode, SELECT } from '../../models/feed.status';
 export class FeedContainerComponent implements OnInit, AfterViewInit, OnDestroy, AfterContentInit {
 
   subscription: Subscription;
-  feedContentItemsList: Array<Feed> = [];
+  sideBar_FeedList: Array<Feed> = [];
+  feedContent_view: Array<Feed> = [];
   feedContentItemsUrlTitle: string;
   feedListMap: Map<any, Feed> = new Map();
 
   constructor(private deepLinkingService: DeepLinkingService, private sharedService: SharedService,
+    private activeRoute: ActivatedRoute, private router: Router,
     private ref: ChangeDetectorRef, private feedSearchService: FeedSearchService) { }
 
   ngOnInit() {
@@ -36,9 +42,25 @@ export class FeedContainerComponent implements OnInit, AfterViewInit, OnDestroy,
   ngAfterViewInit(): void {
     this.searchFeed$();
     this.feedStatusManager$();
+    this.historyNav$();
   };
 
   ngAfterContentInit(): void { };
+
+  historyNav$() {
+    Observable.fromEvent(window, 'popstate').subscribe((state) => {
+      setTimeout(() => {
+        const feedurl = this.activeRoute.snapshot.queryParams['feed'];
+        const list: Array<Feed> = Array.from(this.feedListMap.values());
+        list.map(item => item.isActive = false);
+        const feed: Feed = list.find(item => item.url === feedurl);
+        feed.isActive = true;
+        this.feedContent_view = [feed];
+        this.setContentTitle(feed);
+        this.ref.detectChanges();
+      }, 0);
+    });
+  };
 
   getCurrentParams() {
     const params = this.deepLinkingService.onloadUrlParams('feed');
@@ -46,21 +68,23 @@ export class FeedContainerComponent implements OnInit, AfterViewInit, OnDestroy,
 
   searchFeed$() {
     this.subscription = this.feedSearchService.searchDataResponse$.subscribe((feedResponse) => {
-
       const feed = this.setFeedModel(feedResponse);
-      this.setUI(feed)
-      console.log('feedListMap: ', this.feedListMap);
+      this.response_uiContainer(feed);
       return feedResponse;
-
     });
   };
 
-  setUI(feed: Feed) {
-    this.setContentTitle(feed);
-    this.feedListMap.set(`feedID:${feed.feedID}`, feed);
-    // this.feedListSet.add(feed);
-    this.feedContentItemsList = [feed];
-    this.ref.detectChanges();
+  response_uiContainer(feed: Feed) {
+    const existing = Array.from(this.feedListMap.values());
+    if (!existing.some(item => item.url === feed.url)) {
+      this.feedListMap.set(`feedID:${feed.feedID}`, feed);
+      this.sideBar_FeedList = [feed];
+      // !!! this.sideBar_FeedList.push(feed); !!!
+      // !!! this.sideBar_FeedList.push([feed]); !!!
+      this.feedContent_view = [feed];
+      this.setContentTitle(feed);
+      this.ref.detectChanges();
+    }
   };
 
 
@@ -68,11 +92,12 @@ export class FeedContainerComponent implements OnInit, AfterViewInit, OnDestroy,
     this.subscription = this.sharedService.getFeedStatus$.subscribe((mode: IFeedMode) => {
       if (mode !== null) {
         if (mode.mode === SELECT) {
-          this.setContent_View_Items(mode)
+          this.setContent_View_Items(mode);
         } else {
-          this.removeContent_View_Items(mode);
+          this.remove_ActionStore(mode);
         }
       }
+      this.ref.detectChanges();
       return mode;
     });
   };
@@ -83,28 +108,29 @@ export class FeedContainerComponent implements OnInit, AfterViewInit, OnDestroy,
   };
 
   setContent_View_Items(mode: IFeedMode) {
-    this.feedContentItemsList = [mode.feed];
+    this.feedContent_view = [mode.feed];
     this.setContentTitle(mode.feed);
   };
 
-  removeContent_View_Items(mode: IFeedMode) {
+  remove_ActionStore(mode: IFeedMode) {
     this.feedListMap.delete(`feedID:${mode.feed.feedID}`);
-    this.setNextView(mode.feed.feedID, mode.feed.isActive);
+    this.remove_ActionViewRenderer(mode.feed.feedID, false);
   };
 
-  setNextView(id: number, isActive: boolean) {
+  remove_ActionViewRenderer(id: number, isActive: boolean) {
     if (this.feedListMap.size > 0) {
       const values = this.feedListMap.values();
       const list = Array.from(values);
       const listid = list.map(item => item.feedID);
       const maxid = Math.max(...listid);
       const activeview = list.find(item => item.feedID === maxid);
-      this.feedContentItemsList = [activeview];
+      activeview.isActive = true;
+      this.feedContent_view = [activeview];
       this.setContentTitle(activeview);
       this.ref.detectChanges();
     } else {
       this.setContentTitle(null);
-      this.feedContentItemsList = [];
+      this.feedContent_view = [];
       this.ref.detectChanges();
     }
   };
